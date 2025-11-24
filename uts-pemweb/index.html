@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Senmon No Nihon — Template</title>
+  <meta name="description" content="Platform belajar bahasa Jepang — Hiragana, Katakana, Kotoba, Kanji. Tema: Sakura, clean, colorblind-friendly." />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+ 
+  <style>
+    :root{
+      --bg-base: #f7f4f2; /* very soft off-white */
+      --panel: rgba(255,255,255,0.6);
+      --accent: #f6c7d9; /* pastel sakura pink */
+      --accent-2: #d2c6e8; /* soft complementary */
+      --muted: #8b7f89;
+      --glass-blur: 8px;
+      --radius: 14px;
+      --text: #222;
+      --safe-contrast: #5b5b5b; /* colorblind-friendly tone */
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: 'Nunito', 'Noto Sans JP', system-ui, -apple-system, 'Segoe UI', Roboto;
+      background:var(--bg-base);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow:hidden;
+    }
+
+    /* Background video (looping sakura) */
+    .bg-video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:brightness(0.95) saturate(0.95);}
+    /* subtle overlay to keep contrast stable for colorblind */
+    .bg-overlay{position:fixed;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.25), rgba(250,245,246,0.35));z-index:-1;pointer-events:none}
+
+    /* Page container with scroll inside */
+    .app{position:relative;height:100vh;display:flex;flex-direction:column;}
+    .main{flex:1;overflow:auto;padding:36px;}
+
+    /* Navbar */
+    .nav{
+      display:flex;gap:16px;align-items:center;padding:12px 24px;backdrop-filter:blur(var(--glass-blur));background:linear-gradient(90deg, rgba(255,255,255,0.42), rgba(255,255,255,0.28));border-radius:999px;margin:12px;width:fit-content;box-shadow:0 6px 18px rgba(0,0,0,0.06)
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand .logo{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff}
+    .nav a{color:var(--safe-contrast);text-decoration:none;font-weight:600;padding:8px 12px;border-radius:10px}
+    .nav a.active{background:rgba(255,255,255,0.6);box-shadow:0 4px 10px rgba(0,0,0,0.05)}
+
+    /* layout */
+    .hero{display:grid;grid-template-columns:1fr 440px;gap:28px;align-items:start;margin-top:18px}
+    .hero-left{padding:22px}
+    .hero-right{padding:18px;max-width:440px}
+
+    .card{background:var(--panel);backdrop-filter:blur(var(--glass-blur));border-radius:var(--radius);padding:18px;box-shadow:0 8px 30px rgba(16,16,18,0.04)}
+
+    h1{font-size:28px;margin:0 0 10px 0}
+    p.lead{color:var(--muted);margin:0 0 18px 0}
+
+    /* quick action buttons */
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{padding:10px 14px;border-radius:12px;border:none;background:linear-gradient(180deg,var(--accent), #f3b9cf);cursor:pointer;font-weight:700}
+    .btn.secondary{background:transparent;border:1px solid rgba(0,0,0,0.06);color:var(--safe-contrast);font-weight:600}
+
+    /* grid for modules */
+    .modules{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:18px}
+    .module{padding:14px;border-radius:12px}
+
+    /* hiragana grid */
+    .kana-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+    .kana{background:rgba(255,255,255,0.65);padding:14px;border-radius:10px;text-align:center;font-size:20px;font-weight:700}
+    .kana small{display:block;font-size:12px;color:var(--muted);font-weight:600;margin-top:8px}
+
+    /* dictionary */
+    .search{display:flex;gap:8px}
+    .search input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06)}
+
+    /* flashcard */
+    .flashcard{height:180px;display:flex;align-items:center;justify-content:center;border-radius:12px;font-size:28px;font-weight:700}
+
+    /* quiz list */
+    .quiz-list{display:flex;flex-direction:column;gap:10px}
+
+    /* footer */
+    footer{padding:18px;text-align:center;color:var(--muted)}
+
+    /* responsive tweaks */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .hero-right{max-width:100%}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background video (replace path with actual file in assets/video) -->
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="shinto2.mp4" type="video/mp4">
+  </video>
+  <div class="bg-overlay"></div>
+
+  <div class="app">
+
+    <header style="display:flex;align-items:center;justify-content:space-between;padding:16px 28px">
+      <div class="nav card">
+        <div class="brand">
+          <div class="logo">桜</div>
+          <div style="line-height:1">
+            <div style="font-weight:700">Senmon No Nihon</div>
+            <small style="color:var(--muted);font-weight:600">Belajar Hiragana · Katakana · Kotoba · Kanji</small>
+          </div>
+        </div>
+        <nav style="margin-left:18px;display:flex;align-items:center">
+          <a href="#" class="nav-link active" data-target="home">Home</a>
+          <a href="#" class="nav-link" data-target="hiragana">Hiragana</a>
+          <a href="#" class="nav-link" data-target="katakana">Katakana</a>
+          <a href="#" class="nav-link" data-target="kotoba">Kotoba</a>
+          <a href="#" class="nav-link" data-target="kanji">Kanji</a>
+          <a href="#" class="nav-link" data-target="kamus">Kamus</a>
+        </nav>
+      </div>
+
+    <div style="display:flex;gap:10px;align-items:center">
+     <button class="btn" onclick="location.href='login.html'">Login</button>
+     <button class="btn secondary" onclick="location.href='registrasi.html'">registrasi</button>
+     <button class="btn" id="dailyBtn">Latihan Harian</button>
+     <button class="btn secondary" id="themeToggle">Toggle UI</button>
+</div>
+
+    </header>
+
+    <main class="main">
+
+      <!-- HOME -->
+      <section id="home" class="page">
+        <div class="hero">
+          <div class="hero-left">
+            <div class="card">
+              <h1>Senmon No Nihon</h1>
+              <p class="lead">Belajar bahasa Jepang dengan cara yang tenang, terstruktur, dan menyenangkan. Mulai dari huruf dasar sampai kamus interaktif.</p>
+
+              <div class="actions">
+                <button class="btn" data-target="hiragana">Mulai Hiragana</button>
+                <button class="btn" data-target="kamus">Buka Kamus</button>
+                <button class="btn" data-target="katakana">Buka Katakana</button>
+              </div>
+              
+              
+              <div class="modules">
+                <div class="module card">
+                  <h3>Latihan Cepat</h3>
+                  <div class="quiz-list">
+                    <button class="btn secondary" id="startQuiz">Mulai Quiz Random</button>
+                  </div>
+                </div>
+
+                <div class="module card">
+                  <h3>Progress Kamu</h3>
+                  <p style="color:var(--muted)">Tidak ada data — progress akan tersimpan di browser.</p>
+                </div>
+
+                <div class="module card">
+                  <h3>Flashcard</h3>
+                  <div class="flashcard card" id="flashcard">さくら</div>
+                </div>
+
+                <div class="module card">
+                  <h3>Kategori Kosakata</h3>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+                    <button class="btn secondary">Makanan</button>
+                    <button class="btn secondary">Angka</button>
+                    <button class="btn secondary">Keluarga</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <aside class="hero-right">
+            <div class="card">
+              <h3>Preview Hiragana</h3>
+              <div class="kana-grid" id="hiraganaPreview">
+                <!-- JS akan isi contoh huruf -->
+              </div>
+            </div>
+
+            <div style="height:18px"></div>
+
+            <div class="card">
+              <h3>Kamus Cepat</h3>
+              <div class="search" style="margin-top:8px">
+                <input type="text" id="dictInput" placeholder="Cari: e.g., sushi, さくら, kanji..." aria-label="Cari kata" />
+                <button class="btn" id="searchBtn">Cari</button>
+              </div>
+              <div id="dictResult" style="margin-top:12px;color:var(--muted)">Hasil pencarian akan muncul di sini.</div>
+            </div>
+
+          </aside>
+        </div>
+      </section>
+
+      <!-- HIRAGANA PAGE -->
+      <section id="hiragana" class="page" style="display:none">
+        <div class="card">
+          <h2>Hiragana</h2>
+          <p class="lead">Tabel hiragana dasar — klik untuk mendengar dan latihan.</p>
+          <div class="kana-grid" id="hiraganaGrid"></div>
+        </div>
+      </section>
+
+      <!-- KATAKANA PAGE -->
+      <section id="katakana" class="page" style="display:none">
+        <div class="card">
+          <h2>Katakana</h2>
+          <p class="lead">Tabel katakana dasar — contoh kata serapan.</p>
+          <div class="kana-grid" id="katakanaGrid"></div>
+        </div>
+      </section>
+      <!-- KANJI PAGE -->
+<section id="kanji" class="page" style="display:none">
+  <div class="card">
+    <h2>Kanji Dasar</h2>
+    <p class="lead">20 Kanji dasar dengan romaji dan arti. Klik untuk mendengar cara bacanya.</p>
+
+    <div class="kana-grid" id="kanjiGrid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;">
+      <!-- JS akan mengisi otomatis -->
+    </div>
+  </div>
+</section>
+
+
+      <!-- KOTOBA PAGE -->
+      <section id="kotoba" class="page" style="display:none">
+        <div class="card">
+          <h2>Kotoba (Kosakata)</h2>
+          <p class="lead">Pilih kategori dan latih kosakata dengan flashcard.</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
+            <button class="btn secondary" data-cat="food">Makanan</button>
+            <button class="btn secondary" data-cat="numbers">Angka</button>
+            <button class="btn secondary" data-cat="daily">Sehari-hari</button>
+          </div>
+          <div style="height:12px"></div>
+          <div class="card flashcard" id="kotobaCard">Klik kategori untuk mulai</div>
+        </div>
+      </section>
+    </main>
+
+ <footer class="sakura-footer">
+  <div class="footer-inner">
+    <span class="id">@Copyright23552011393 - Irham Irawan - 223 CNS B</span>
+  </div>
+</footer>
+
+  </div>
+
+  <script>
+    // ======= Sample data (small) =======
+    const HIRAGANA = [
+      ['あ','a'],['い','i'],['う','u'],['え','e'],['お','o'],
+      ['か','ka'],['き','ki'],['く','ku'],['け','ke'],['こ','ko'],
+      ['さ','sa'],['し','shi'],['す','su'],['せ','se'],['そ','so'],
+      ['な','na'],['に','ni'],['ぬ','nu'],['ね','ne'],['の','no'],
+      ['た','ta'],['ち','chi'],['つ','tsu'],['て','te'],['と','to'],
+      ['ら','ra'],['り','ri'],['る','ru'],['れ','re'],['ろ','ro'],
+      ['ま','ma'],['み','mi'],['む','mu'],['め','me'],['も','mo'],
+      ['は','ha'],['ひ','hi'],['ふ','hu'],['へ','he'],['ほ','ho'],
+      ['や','ya'],['',''],['ゆ','yu'],['',''],['よ','yo'],
+      ['わ','wa'],['',''],['',''],['',''],['を','wo'],
+      ['ん','n']
+
+    ];
+
+    const KATAKANA = [
+      ['ア','a'],['イ','i'],['ウ','u'],['エ','e'],['オ','o'],
+      ['カ','ka'],['キ','ki'],['ク','ku'],['ケ','ke'],['コ','ko'],
+      ['サ','sa'],['シ','shi'],['ス','su'],['セ','se'],['ソ','so'],
+      ['ナ','na'],['ニ','ni'],['ヌ','nu'],['ネ','ne'],['ノ','no'],
+      ['タ','ta'],['チ','chi'],['ツ','tsu'],['テ','te'],['ト','to'],
+      ['ラ','ra'],['リ','ri'],['ル','ru'],['レ','re'],['ロ','ro'],
+      ['マ','ma'],['ミ','mi'],['ム','mu'],['メ','me'],['モ','mo'],
+      ['ハ','ha'],['ヒ','hi'],['フ','hu'],['ヘ','he'],['ホ','ho'],
+      ['ヤ','ya'],['',''],['ユ','yu'],['',''],['ヨ','yo'],
+      ['ワ','wa'],['',''],['',''],['',''],['ヲ','wo'],
+      ['ン','n']
+    ];
+    const KOTOBA = [
+  {jp:'ねこ', romaji:'neko', meaning:'kucing'},
+  {jp:'いぬ', romaji:'inu', meaning:'anjing'},
+  {jp:'みず', romaji:'mizu', meaning:'air'},
+  {jp:'ごはん', romaji:'gohan', meaning:'nasi / makan'},
+  {jp:'くるま', romaji:'kuruma', meaning:'mobil'},
+  {jp:'でんしゃ', romaji:'densha', meaning:'kereta'},
+  {jp:'がっこう', romaji:'gakkō', meaning:'sekolah'},
+  {jp:'せんせい', romaji:'sensei', meaning:'guru'},
+  {jp:'ともだち', romaji:'tomodachi', meaning:'teman'},
+  {jp:'いえ', romaji:'ie', meaning:'rumah'},
+  {jp:'みせ', romaji:'mise', meaning:'toko'},
+  {jp:'ほん', romaji:'hon', meaning:'buku'},
+  {jp:'じかん', romaji:'jikan', meaning:'waktu'},
+  {jp:'あさ', romaji:'asa', meaning:'pagi'},
+  {jp:'ひる', romaji:'hiru', meaning:'siang'},
+  {jp:'よる', romaji:'yoru', meaning:'malam'},
+  {jp:'おかね', romaji:'okane', meaning:'uang'},
+  {jp:'きょう', romaji:'kyō', meaning:'hari ini'},
+  {jp:'あした', romaji:'ashita', meaning:'besok'},
+  {jp:'きのう', romaji:'kinō', meaning:'kemarin'},
+  ];
+
+    const KANJI = [
+  {kanji:'日', romaji:'nichi / hi', meaning:'matahari, hari'},
+  {kanji:'月', romaji:'getsu / tsuki', meaning:'bulan'},
+  {kanji:'火', romaji:'ka / hi', meaning:'api'},
+  {kanji:'水', romaji:'sui / mizu', meaning:'air'},
+  {kanji:'木', romaji:'moku / ki', meaning:'pohon'},
+  {kanji:'金', romaji:'kin / kane', meaning:'emas, uang'},
+  {kanji:'土', romaji:'do / tsuchi', meaning:'tanah'},
+  {kanji:'山', romaji:'yama', meaning:'gunung'},
+  {kanji:'川', romaji:'kawa', meaning:'sungai'},
+  {kanji:'田', romaji:'ta', meaning:'sawah'},
+  {kanji:'人', romaji:'hito / jin', meaning:'orang'},
+  {kanji:'口', romaji:'kuchi', meaning:'mulut'},
+  {kanji:'目', romaji:'me', meaning:'mata'},
+  {kanji:'耳', romaji:'mimi', meaning:'telinga'},
+  {kanji:'手', romaji:'te', meaning:'tangan'},
+  {kanji:'足', romaji:'ashi', meaning:'kaki'},
+  {kanji:'力', romaji:'chikara', meaning:'kekuatan'},
+  {kanji:'本', romaji:'hon', meaning:'buku, asal'},
+  {kanji:'学', romaji:'gaku', meaning:'belajar'},
+  {kanji:'先', romaji:'saki / sen', meaning:'sebelum, depan'},
+  {kanji:'名', romaji:'na / mei', meaning:'nama'},
+  {kanji:'年', romaji:'nen / toshi', meaning:'tahun'},
+  {kanji:'大', romaji:'dai / ookii', meaning:'besar'},
+  {kanji:'小', romaji:'shou / chiisai', meaning:'kecil'},
+  {kanji:'中', romaji:'chuu / naka', meaning:'tengah'},
+  {kanji:'長', romaji:'chou / nagai', meaning:'panjang'},
+  {kanji:'高', romaji:'kou / takai', meaning:'tinggi, mahal'},
+  {kanji:'安', romaji:'an / yasui', meaning:'murah, aman'},
+  {kanji:'新', romaji:'shin / atarashii', meaning:'baru'},
+  {kanji:'古', romaji:'ko / furui', meaning:'lama'},
+  {kanji:'早', romaji:'sou / hayai', meaning:'cepat, awal'},
+  {kanji:'行', romaji:'kou / iku', meaning:'pergi'},
+  {kanji:'見', romaji:'ken / miru', meaning:'melihat'},
+  {kanji:'言', romaji:'gen / iu', meaning:'berkata'},
+  {kanji:'食', romaji:'shoku / taberu', meaning:'makan'},
+  {kanji:'飲', romaji:'in / nomu', meaning:'minum'},
+  {kanji:'車', romaji:'sha / kuruma', meaning:'mobil, kendaraan'},
+  {kanji:'校', romaji:'kou', meaning:'sekolah'},
+  {kanji:'書', romaji:'sho / kaku', meaning:'menulis'},
+  {kanji:'話', romaji:'wa / hanasu', meaning:'berbicara'},
+];
+    const DICT = [
+      {kana:'さくら',romaji:'sakura',meaning:'bunga sakura / cherry blossom'},
+      {kana:'すし',romaji:'sushi',meaning:'makanan sushi'},
+      {kanji:'山',romaji:'yama',meaning:'gunung'}
+    ];
+
+    // ======= Utilities =======
+    function $(sel){return document.querySelector(sel)}
+    function $all(sel){return document.querySelectorAll(sel)}
+
+    // populate preview
+    const preview = $('#hiraganaPreview');
+    HIRAGANA.slice(0,10).forEach(h => {
+      const el = document.createElement('div');el.className='kana';el.innerHTML=`${h[0]}<small>${h[1]}</small>`;preview.appendChild(el);
+    });
+
+    // navigation
+    $all('.nav-link').forEach(a=>a.addEventListener('click',e=>{
+      e.preventDefault();const t=a.dataset.target;showPage(t);setActive(a);
+    }));
+    $all('.btn[data-target]').forEach(b=>b.addEventListener('click',e=>{const t=b.dataset.target;showPage(t);}))
+
+    function showPage(id){
+      $all('.page').forEach(p=>p.style.display='none');
+      const el = document.getElementById(id);
+      if(el) el.style.display='block';
+      // scroll top when show
+      document.querySelector('.main').scrollTop = 0;
+    }
+    function setActive(link){ $all('.nav-link').forEach(x=>x.classList.remove('active')); link.classList.add('active'); }
+
+    // populate hiragana & katakana grids
+    const hiraGrid = $('#hiraganaGrid'); HIRAGANA.forEach(h=>{const d=document.createElement('div');d.className='kana';d.innerHTML=`${h[0]}<small>${h[1]}</small>`;d.tabIndex=0;d.addEventListener('click',()=>speak(h[0]));hiraGrid.appendChild(d)});
+    const kataGrid = $('#katakanaGrid'); KATAKANA.forEach(k=>{const d=document.createElement('div');d.className='kana';d.innerHTML=`${k[0]}<small>${k[1]}</small>`;d.tabIndex=0;kataGrid.appendChild(d)});
+    // Populate Kanji grid
+const kanjiGrid = document.getElementById('kanjiGrid');
+
+  KANJI.forEach(item => {
+  const box = document.createElement('div');
+  box.className = 'kana';
+  box.style.padding = '16px';
+  box.style.fontSize = '22px';
+  box.innerHTML = `
+    ${item.kanji}
+    <small style="margin-top:6px">${item.romaji}</small>
+    <small style="margin-top:4px;color:var(--muted)">${item.meaning}</small>
+  `;
+
+  // klik untuk cara baca
+  box.addEventListener('click', () => speak(item.kanji));
+
+  kanjiGrid.appendChild(box);
+});
+
+    // Simple TTS (browser) for demo purposes
+    function speak(text){
+      if(!('speechSynthesis' in window)) return;
+      const ut = new SpeechSynthesisUtterance(text);
+      ut.lang = 'ja-JP';
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(ut);
+    }
+
+    // dictionary search
+    $('#searchBtn').addEventListener('click', ()=>{
+      const q = $('#dictInput').value.trim().toLowerCase();
+      if(!q) {$('#dictResult').textContent='Masukkan kata untuk mencari.';return}
+      const found = DICT.find(x => (x.kana && x.kana.includes(q)) || (x.romaji && x.romaji.includes(q)) || (x.kanji && x.kanji.includes(q)) );
+      if(found) $('#dictResult').innerHTML = `<strong>${found.kana || found.kanji} (${found.romaji || ''})</strong><div style="color:var(--muted)">${found.meaning}</div>`;
+      else $('#dictResult').textContent = 'Tidak ditemukan.';
+    });
+
+    // kamus page search
+    $('#kamusSearch').addEventListener('click', ()=>{
+      const q = $('#kamusInput').value.trim().toLowerCase();
+      if(!q){$('#kamusResult').textContent='Masukkan kata...';return}
+      const res = DICT.filter(x=> (x.kana && x.kana.includes(q)) || (x.romaji && x.romaji.includes(q)) || (x.kanji && x.kanji.includes(q)));
+      if(res.length){
+        $('#kamusResult').innerHTML = res.map(r=>`<div><strong>${r.kana||r.kanji} (${r.romaji||''})</strong><div style='color:var(--muted)'>${r.meaning}</div></div>`).join('');
+      } else $('#kamusResult').textContent='Hasil kosong.';
+    });
+
+    // flashcard small behavior
+    const flash = $('#flashcard');
+    let flashIndex = 0;const flashItems=['さくら','すし','ありがとう'];
+    setInterval(()=>{flashIndex=(flashIndex+1)%flashItems.length;flash.textContent=flashItems[flashIndex]},4000);
+
+    // kotoba categories
+    $all('[data-cat]').forEach(b=>b.addEventListener('click', ()=>{
+      const cat = b.dataset.cat;const mappings={
+        food:['すし - sushi','おちゃ - tea','ごはん - nasi'],
+        numbers:['いち - 1','に - 2','さん - 3'],
+        daily:['おはよう - selamat pagi','ありがとう - terima kasih']
+      };
+      const arr = mappings[cat]||['Kosakata belum tersedia'];$('#kotobaCard').textContent = arr[0];
+    }));
+
+    // QUICK: start random quiz (very small demo)
+    $('#startQuiz').addEventListener('click', ()=>{
+      const all = [...HIRAGANA,...KATAKANA];const item = all[Math.floor(Math.random()*all.length)];alert('Quiz: Sebutkan bunyi dari: '+item[0]+' (jawaban: '+(item[1]||'')+')');
+    });
+
+    // daily button navigates to kamus (placeholder)
+    $('#dailyBtn').addEventListener('click', ()=>showPage('kamus'));
+
+    // theme toggle simple (reduce overlay to see contrast)
+    $('#themeToggle').addEventListener('click', ()=>{
+      const ov = document.querySelector('.bg-overlay'); ov.style.display = (ov.style.display==='none')? 'block' : 'none';
+    });
+
+    // initial active show
+    showPage('home');
+
+    // accessibility: keyboard navigation for pages (1..5)
+    document.addEventListener('keydown', (e)=>{
+      if(e.key>='1' && e.key<='6'){
+        const map=['home','hiragana','katakana','kotoba','kanji','kamus']; showPage(map[parseInt(e.key)-1]);
+      }
+    });
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Utama — Senmon No Nihon</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --panel: rgba(255, 255, 255, 0.45);
+      --text: #1a1a1a;
+      --accent: #f4c7d6;
+      --accent2: #d7c8ff;
+      --glass-blur: 14px;
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Nunito', 'Noto Sans JP', sans-serif;
+      background: #f6f2f3;
+      overflow-x: hidden;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Background Video */
+    .bg-video {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.88);
+      z-index: -2;
+    }
+
+    /* Overlay */
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg,
+          rgba(255, 255, 255, 0.15),
+          rgba(248, 244, 245, 0.4));
+      backdrop-filter: blur(3px);
+      z-index: -1;
+    }
+
+    /* Header */
+    header {
+      width: 100%;
+      padding: 22px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .logo {
+      font-size: 30px;
+      font-weight: 700;
+      font-family: 'Noto Sans JP';
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+    }
+
+    .logout-btn {
+      padding: 8px 18px;
+      border: none;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    .logout-btn:hover {
+      filter: brightness(1.07);
+    }
+
+    /* Popup Login */
+    .alert-login {
+      position: fixed;
+      top: 25px;
+      right: 25px;
+      background: rgba(255, 255, 255, 0.85);
+      padding: 16px 26px;
+      border-radius: 14px;
+      font-weight: 600;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+      animation: fadeSlide 1s ease;
+      z-index: 900;
+    }
+
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Main Container */
+    .menu-container {
+      max-width: 1180px;
+      margin: 60px auto;
+      padding: 0 25px;
+      text-align: center;
+    }
+
+    .title-jp {
+      font-size: 30px;
+      font-family: 'Noto Sans JP';
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 5px;
+    }
+
+    h2 {
+      margin-top: 5px;
+      font-size: 34px;
+      font-weight: 700;
+    }
+
+    /* Grid */
+    .menu-grid {
+      margin-top: 55px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 35px;
+    }
+
+    .menu-card {
+      padding: 32px;
+      background: var(--panel);
+      backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+      transition: 0.25s ease;
+      cursor: pointer;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .menu-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+      filter: brightness(1.05);
+    }
+
+    .menu-card h3 {
+      font-size: 22px;
+      margin: 0;
+      font-weight: 700;
+      font-family: 'Noto Sans JP';
+    }
+
+    .divider {
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      margin: 12px auto 16px;
+      border-radius: 50px;
+    }
+
+    .menu-card p {
+      font-size: 15px;
+      color: #514b4b;
+      line-height: 1.55;
+    }
+  </style>
+</head>
+ 
+<body>
+
+  <video class="bg-video" autoplay muted loop>
+    <source src="sakura.mp4" type="video/mp4">
+  </video>
+  <div class="bg-overlay"></div>
+
+  <!-- LOGIN ALERT -->
+  <div id="loginAlert" class="alert-login" style="display:none;">
+    Login berhasil — Selamat datang kembali.
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">Senmon No Nihon</div>
+    <button class="logout-btn" onclick="window.location.href='login.html'">Keluar</button>
+  </header>
+
+  <!-- MAIN MENU -->
+  <div class="menu-container">
+    <div class="title-jp">メインメニュー</div>
+    <h2>Menu Utama</h2>
+
+    <div class="menu-grid">
+
+      <div class="menu-card" onclick="location.href='kursus.html'">
+        <h3>学習コース — Program Pembelajaran</h3>
+        <div class="divider"></div>
+        <p>Pembelajaran terstruktur dari dasar hingga lanjutan dengan kurikulum yang dirancang secara profesional.</p>
+      </div>
+
+      <div class="menu-card" onclick="location.href='kotoba.html'">
+        <h3>語彙・ことば — Modul Kosakata</h3>
+        <div class="divider"></div>
+        <p>Kumpulan kosakata penting lengkap dengan contoh penggunaan dan penjelasan kontekstual.</p>
+      </div>
+
+      <div class="menu-card" onclick="location.href='kanji.html'">
+        <h3>漢字ラボ — Kanji Lab</h3>
+        <div class="divider"></div>
+        <p>Pelajari Kanji melalui penulisan, makna, dan pembacaan dengan pendekatan visual modern.</p>
+      </div>
+
+      <div class="menu-card" onclick="location.href='budaya.html'">
+        <h3>文化ガイド — Panduan Budaya Jepang</h3>
+        <div class="divider"></div>
+        <p>Eksplorasi budaya dan tradisi Jepang untuk mendukung pemahaman bahasa secara lebih mendalam.</p>
+      </div>
+
+      <div class="menu-card" onclick="location.href='profil.html'">
+        <h3>マイページ — Profil Pribadi</h3>
+        <div class="divider"></div>
+        <p>Kelola informasi akun, progres belajar, dan preferensi tampilan Anda.</p>
+      </div>
+
+      <div class="menu-card" onclick="location.href='about.html'">
+        <h3>プラットフォームについて — Tentang Platform</h3>
+        <div class="divider"></div>
+        <p>Informasi resmi tentang visi, misi, dan filosofi pengembangan  Senmon No Nihon.</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("login") === "success") {
+      const alertBox = document.getElementById("loginAlert");
+      alertBox.style.display = "block";
+      setTimeout(() => {
+        alertBox.style.opacity = "0";
+      }, 3000);
+    }
+     <footer class="sakura-footer">
+    <span>@Copyright by — 23552011393-Irham Irawan-223 CNS B</span>
+  </footer>
+  </script>
+
+</body>
+</html>

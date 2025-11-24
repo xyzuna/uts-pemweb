@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrasi Akun — Senmon No Nihon</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&family=Nunito:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-base: #f7f4f2;
+      --panel: rgba(255,255,255,0.55);
+      --accent: #f6c7d9;
+      --accent-2: #d2c6e8;
+      --muted: #827a84;
+      --glass-blur: 12px;
+      --radius: 18px;
+      --text: #222;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Nunito','Noto Sans JP',sans-serif;
+      background: var(--bg-base);
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text);
+      position: relative;
+      padding-bottom: 60px;
+    }
+
+    .bg-video {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      filter: brightness(0.85);
+    }
+
+    .bg-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg,rgba(255,255,255,0.25),rgba(248,244,245,0.35));
+      backdrop-filter: blur(3px);
+      z-index: -1;
+    }
+
+    .register-container {
+      max-width: 420px;
+      margin: 100px auto;
+      padding: 35px;
+      background: var(--panel);
+      border-radius: var(--radius);
+      backdrop-filter: blur(var(--glass-blur));
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+      text-align: center;
+      animation: fadeIn 1.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .title-jp {
+      font-size: 30px;
+      font-family: 'Noto Sans JP';
+      letter-spacing: 3px;
+      background: linear-gradient(90deg,var(--accent),var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0;
+    }
+
+    h2 {
+      margin-top: 5px;
+      font-size: 27px;
+      font-weight: 700;
+      color: #333;
+    }
+
+    .input-group {
+      text-align: left;
+      margin-top: 18px;
+    }
+
+    label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #444;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      border-radius: 12px;
+      border: 1.5px solid #e3dce6;
+      font-size: 15px;
+      background: rgba(255,255,255,0.7);
+      outline: none;
+      transition: .25s ease;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 6px rgba(246,199,217,0.4);
+    }
+
+    .register-btn {
+      margin-top: 26px;
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(120deg,var(--accent),var(--accent-2));
+      color: white;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .25s ease;
+    }
+
+    .register-btn:hover {
+      filter: brightness(1.08);
+      transform: translateY(-2px);
+    }
+
+    .login-link {
+      margin-top: 18px;
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .login-link:hover {
+      text-decoration: underline;
+    }
+
+    .sakura-footer {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      padding: 12px 0;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 50;
+      color: #333;
+      letter-spacing: 0.5px;
+    }
+
+    .sakura-footer span {
+      background: linear-gradient(90deg, #f4c7d6, #d7c8ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+
+<body>
+
+  <video class="bg-video" autoplay muted loop playsinline>
+    <source src="sakura.mp4" type="video/mp4">
+  </video>
+  <div class="bg-overlay"></div>
+
+  <div class="register-container">
+
+    <div class="title-jp">登録</div>
+    <h2>Registrasi Akun</h2>
+
+<form action="http://localhost/uts-pemweb/auth/register.php" method="POST">
+
+      <div class="input-group">
+        <label>Nama Lengkap</label>
+        <input type="text" id="nama" name="nama" required>
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+
+      <button class="register-btn">Daftar</button>
+
+    </form>
+
+    <a href="login.html" class="login-link">Sudah punya akun? Login</a>
+  </div>
+
+  <footer class="sakura-footer">
+    <span>@Copyright by - 23552011393 - Irham Irawan - 223 CNS B</span>
+  </footer>
+
+</body>
+</html>

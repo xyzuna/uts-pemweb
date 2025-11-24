@@ -1,0 +1,479 @@
+/* ===========================
+   Base / Variables
+   =========================== */
+:root{
+    --primary-red: #E60012;
+    --dark-red: #C20010;
+    --white: #FFFFFF;
+    --bg: #FCFBFA;
+    --muted: #6b6b6b;
+    --shadow-sm: 0 6px 18px rgba(17,17,17,0.06);
+    --shadow-md: 0 10px 30px rgba(17,17,17,0.08);
+    --transition: 0.28s cubic-bezier(.4,0,.2,1);
+    --sakura-color: rgba(230,0,18,0.9);
+    --sakura-petal: rgba(246,190,204,0.95);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+    font-family: 'Noto Sans JP', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(180deg,var(--bg) 0%, #F6F5F3 100%);
+    color:#212121;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    overflow-x:hidden;
+}
+
+/* ===========================
+   Navigation
+   =========================== */
+.navbar{
+    padding: 0.9rem 0;
+    backdrop-filter: blur(4px);
+}
+
+.brand-mark{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:44px;height:44px;
+    border-radius:8px;
+    background: linear-gradient(135deg, rgba(230,0,18,0.06), rgba(230,0,18,0.02));
+    color:var(--primary-red);
+    font-weight:700;
+    font-size:1rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.brand-text{
+    font-weight:700;
+    color:#1F1F1F;
+    font-size:1.1rem;
+}
+
+/* Nav link subtle underline */
+.nav-link{
+    color: #333!important;
+}
+.nav-link.active{color:var(--primary-red)!important}
+
+/* ===========================
+   HERO
+   =========================== */
+.hero-section{
+    padding:4.2rem 0 3.2rem;
+    position:relative;
+    overflow:visible;
+}
+
+/* seigaiha accent (subtle pattern) */
+.seigaiha-accent{
+    position:absolute;
+    right:6%;
+    top:8%;
+    width:320px;height:320px;
+    background-image:radial-gradient(circle at 20% 80%, rgba(230,0,18,0.02) 0%, transparent 50%);
+    opacity:0.9;
+    border-radius:50%;
+    filter:blur(12px);
+    pointer-events:none;
+}
+
+/* hero text */
+.kicker{color:var(--muted);font-size:0.9rem;font-weight:500}
+.hero-title{font-size:2.6rem;font-weight:700;margin-top:0.35rem;margin-bottom:0.4rem;color:#111}
+.hero-subtitle{color:var(--dark-red);font-size:1.1rem;margin-bottom:0.8rem}
+.hero-description{color:#555;max-width:54ch;margin-bottom:1.2rem}
+
+/* CTAs */
+.btn-japanese{padding:0.68rem 1.25rem;border-radius:10px;font-weight:600;letter-spacing:0.2px}
+.btn-japanese:hover{transform:translateY(-3px)}
+.btn-japanese-light{background:transparent;border:1px solid rgba(0,0,0,0.06);color:#222}
+
+/* hero panel (right) */
+.hero-panel{
+    background:linear-gradient(180deg, rgba(255,255,255,0.75), rgba(250,250,250,0.9));
+    border-radius:14px;padding:1.5rem;box-shadow:var(--shadow-md);border:1px solid rgba(0,0,0,0.03);
+}
+.panel-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
+.logo-compact{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--white);color:var(--primary-red);font-weight:700}
+.panel-title{font-weight:700;font-size:1.05rem}
+.panel-lead{font-weight:600;color:var(--muted);margin-bottom:.75rem}
+.panel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem}
+.panel-item{background:linear-gradient(180deg,#fff,#fafafa);padding:.6rem;border-radius:8px;border:1px solid rgba(0,0,0,0.03);text-align:center}
+
+/* ===========================
+   Info Cards
+   =========================== */
+.info-section{padding:3.2rem 0 4.2rem}
+.section-title{font-size:1.6rem;font-weight:700;color:#111}
+.info-card{
+    background:#fff;border-radius:12px;padding:1.5rem;height:100%;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;
+    transition:transform var(--transition), box-shadow var(--transition);
+    border:1px solid rgba(0,0,0,0.04);
+}
+.info-card:focus{outline:3px solid rgba(230,0,18,0.06)}
+.info-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-md)}
+.card-head{display:flex;gap:.9rem;align-items:center}
+.card-icon{font-size:2.05rem}
+.card-meta{display:flex;flex-direction:column}
+.card-title{font-weight:700;color:#1b1b1b}
+.card-description{color:#666;margin-top:.9rem;flex:1}
+.card-footer{margin-top:1.1rem;display:flex;justify-content:flex-end;align-items:center}
+.read-more{color:var(--primary-red);font-weight:600}
+
+/* ===========================
+   Footer
+   =========================== */
+.footer{background:transparent;padding:2rem 0;border-top:1px solid rgba(0,0,0,0.04);margin-top:3rem}
+.footer-content{text-align:center}
+.footer-text{font-weight:700;color:#222}
+.footer-subtext{color:var(--muted);font-size:.95rem}
+/* =========================================================
+   SECTION KANJI — CLEAN, AESTHETIC, SAKURA STYLE
+   ========================================================= */
+
+/* Container utama */
+#kanji .kanji-container {
+    margin-top: 40px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+    animation: fadeIn 0.7s ease;
+}
+
+/* Judul */
+#kanji .kanji-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: #2d2d2d;
+    margin-bottom: 25px;
+    letter-spacing: 1.5px;
+    text-shadow: 0 1px 3px rgba(255, 150, 170, 0.4);
+}
+
+/* Grid Kanji */
+#kanji .kanji-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 18px;
+    margin-bottom: 40px;
+}
+
+/* Box tiap kanji */
+#kanji .kanji-box {
+    background: linear-gradient(135deg, #ffffff, #faf7fb);
+    padding: 20px 10px;
+    border-radius: 16px;
+    text-align: center;
+    border: 1px solid rgba(255, 177, 203, 0.35);
+    box-shadow: 0 3px 12px rgba(255, 150, 170, 0.18);
+    transition: 0.25s ease;
+    cursor: pointer;
+}
+
+/* Hover glow */
+#kanji .kanji-box:hover {
+    transform: translateY(-6px) scale(1.05);
+    background: #ffedf4;
+    box-shadow: 0 8px 20px rgba(255, 120, 160, 0.28);
+}
+
+/* Huruf Kanji */
+#kanji .kanji-symbol {
+    font-size: 42px;
+    font-weight: bold;
+    color: #1d1d1d;
+    margin-bottom: 6px;
+    font-family: "Noto Serif JP", serif;
+    text-shadow: 0 2px 6px rgba(255, 140, 170, 0.35);
+}
+
+/* Arti Kanji */
+#kanji .kanji-meaning {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    color: #555;
+}
+
+/* Animasi fade */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    #kanji .kanji-title {
+        font-size: 22px;
+    }
+    #kanji .kanji-symbol {
+        font-size: 32px;
+    }
+}
+/* ========= GLOBAL RESET ========= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ========= PAGE LAYOUT ========= */
+body {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #111;
+}
+
+/* ========= VIDEO BACKGROUND ========= */
+.login-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  filter: brightness(55%) blur(3px);
+}
+
+/* ========= OVERLAY GRADIENT (ELEGAN) ========= */
+.login-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 182, 193, 0.25),
+    rgba(255, 255, 255, 0.05)
+  );
+}
+
+/* ========= LOGIN CARD ========= */
+.login-card {
+  width: 380px;
+  padding: 35px;
+  border-radius: 20px;
+
+  /* GLASS MORPHISM EFFECT */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 1s ease;
+}
+
+/* ========= TITLE ========= */
+.login-card h2 {
+  text-align: center;
+  color: white;
+  font-size: 28px;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+/* ========= INPUT FIELDS ========= */
+.input-field {
+  width: 100%;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field label {
+  color: #ffe4ec;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.input-field input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: none;
+
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+}
+
+.input-field input::placeholder {
+  color: #f8e6ef;
+}
+
+/* ========= BUTTON ========= */
+.login-btn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 12px;
+  font-weight: 600;
+
+  background: linear-gradient(135deg, #ff7aae, #ffb7d5);
+  color: white;
+  transition: 0.25s ease;
+}
+
+.login-btn:hover {
+  opacity: 0.85;
+  transform: scale(1.02);
+}
+
+/* ========= LINK ========= */
+.login-link {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.login-link a {
+  color: #ffbad6;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+/* ========= FADE-IN ANIMATION ========= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ===== GLOBAL RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+/* ===== BACKGROUND VIDEO ===== */
+.bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2; /* di belakang semua */
+}
+
+.bg-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45); /* overlay gelap */
+    backdrop-filter: blur(2px);       /* kesan elegan */
+    z-index: -1;
+}
+
+/* ===== LOGIN LAYOUT ===== */
+.login-container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ===== LOGIN BOX ===== */
+.login-box {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 40px 45px;
+    border-radius: 18px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.1);
+    width: 380px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.login-box h2 {
+    color: white;
+    font-size: 28px;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+}
+
+/* ===== INPUT FORM ===== */
+.input-group {
+    text-align: left;
+    margin-bottom: 18px;
+}
+
+.input-group label {
+    color: #ffffff;
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    background: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+}
+
+/* ===== BUTTON LOGIN ===== */
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background: #ff4b9b;       /* warna pink elegan ala Jepang */
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.login-btn:hover {
+    background: #e63c8a;
+    transform: translateY(-2px);
+}
+
+/* ===== REGISTER LINK ===== */
+.register-link {
+    color: #fff;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #ffb6dc;
+    text-decoration: none;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}

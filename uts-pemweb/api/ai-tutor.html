@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>AI Tutor (Suara) — Sakura Nihongo Lab</title>
+
+  <!-- Minimal Sakura styling -->
+  <style>
+    :root{
+      --bg:#f7f4f2;
+      --card: rgba(255,255,255,0.75);
+      --accent: #f6c7d9;
+      --muted:#7d7480;
+      --radius:14px;
+      --glass:8px;
+      --text:#222;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:Inter, system-ui, "Noto Sans JP", sans-serif;
+      background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;
+    }
+
+    header{
+      display:flex;align-items:center;justify-content:space-between;padding:18px 24px;
+      backdrop-filter:blur(var(--glass));
+    }
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent), #d2c6e8);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    .back{padding:8px 12px;border-radius:10px;background:transparent;border:1px solid rgba(0,0,0,0.06);text-decoration:none;color:var(--muted)}
+
+    main{max-width:1000px;margin:18px auto;padding:18px}
+    .card{background:var(--card);backdrop-filter:blur(var(--glass));border-radius:var(--radius);padding:18px;box-shadow:0 8px 30px rgba(16,16,18,0.04)}
+
+    /* chat area */
+    .chat-wrap{height:60vh;display:flex;flex-direction:column;border-radius:12px;overflow:hidden;border:1px solid rgba(0,0,0,0.04)}
+    .messages{flex:1;padding:14px;overflow:auto;background:linear-gradient(180deg,rgba(255,255,255,0.3), rgba(255,255,255,0.1))}
+    .msg{max-width:78%;margin-bottom:12px;padding:10px 14px;border-radius:12px;line-height:1.4}
+    .msg.user{margin-left:auto;background:linear-gradient(180deg,#fff,#fff);box-shadow:0 6px 18px rgba(0,0,0,0.03);font-weight:600}
+    .msg.ai{background:linear-gradient(180deg,var(--accent), #f3b9cf);color:#222}
+    .meta{font-size:12px;color:var(--muted);margin-bottom:6px}
+
+    /* control bar */
+    .controls{display:flex;gap:12px;padding:12px;border-top:1px solid rgba(0,0,0,0.04);align-items:center}
+    .btn {
+      padding:10px 14px;border-radius:12px;border:none;cursor:pointer;background:#fff;font-weight:700;
+      box-shadow:0 6px 18px rgba(0,0,0,0.04)
+    }
+    .mic {display:flex;gap:8px;align-items:center}
+    .mic .rec{width:42px;height:42px;border-radius:999px;background:linear-gradient(180deg,#ff6b8a,#ffced9);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;cursor:pointer;border:2px solid rgba(255,255,255,0.2)}
+    .mic .rec.recording{animation:recPulse 1s infinite}
+    @keyframes recPulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+
+    .inputwrap{display:flex;gap:8px;flex:1}
+    input[type="text"]{flex:1;padding:10px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.06)}
+    select{padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06)}
+
+    .hint{font-size:13px;color:var(--muted);margin-top:8px}
+
+    /* responsive */
+    @media (max-width:680px){ .messages{padding:10px} .controls{flex-direction:column;align-items:stretch} .inputwrap{width:100%} }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="logo">桜</div>
+      <div>
+        <div style="font-weight:700">Sakura AI Tutor</div>
+        <div style="font-size:13px;color:var(--muted)">Practice speaking Japanese with voice</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;align-items:center">
+      <a class="back" href="index.html">← Kembali</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div style="display:flex;gap:10px;align-items:center">
+          <strong>AI Tutor Voice</strong>
+          <small style="color:var(--muted)">Mode percakapan</small>
+        </div>
+
+        <div style="display:flex;gap:8px;align-items:center">
+          <label style="font-size:13px;color:var(--muted)">Voice:</label>
+          <select id="voiceSelect" aria-label="Voice select">
+            <option value="browser">Browser TTS (default)</option>
+            <option value="high">High-quality (requires server)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="chat-wrap" aria-live="polite">
+        <div class="messages" id="messages">
+          <!-- chat bubbles here -->
+        </div>
+
+        <div class="controls">
+          <div class="mic">
+            <div id="recBtn" class="rec" title="Klik untuk bicara">🎙</div>
+            <div style="font-size:13px;color:var(--muted)">Tekan untuk mulai bicara</div>
+          </div>
+
+          <div class="inputwrap">
+            <input id="textInput" type="text" placeholder="Ketik atau rekam suara, contoh: こんにちは。"/>
+            <button class="btn" id="sendBtn">Kirim</button>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+            <select id="langMode" title="Language mode">
+              <option value="ja">日本語 (Japanese)</option>
+              <option value="id">Indonesia (explain in Indonesian)</option>
+            </select>
+            <button class="btn" id="clearBtn" title="Bersihkan chat">Bersihkan</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="hint">Info: Fitur suara memakai Web Speech API. Untuk kualitas suara AI lebih natural, hubungkan endpoint server TTS (lihat doc di komentar kode).</div>
+    </div>
+  </main>
+
+  <script>
+  // ----------------------------
+  // AI Tutor (Client-side)
+  // - STT using Web SpeechRecognition (browser)
+  // - TTS using speechSynthesis (browser) or fallback
+  // - Sends user text to /api/ai-tutor if available (POST {text, mode})
+  // - If server unavailable, simple local response generator (fallback)
+  // ----------------------------
+
+  // helpers
+  const $ = sel => document.querySelector(sel);
+  const messagesEl = $('#messages');
+  const textInput = $('#textInput');
+  const sendBtn = $('#sendBtn');
+  const recBtn = $('#recBtn');
+  const clearBtn = $('#clearBtn');
+  const langMode = $('#langMode');
+  const voiceSelect = $('#voiceSelect');
+
+  // append message
+  function pushMessage(content, who='ai') {
+    const wrap = document.createElement('div');
+    wrap.className = 'msg ' + (who === 'user' ? 'user' : 'ai');
+    if(who === 'user') {
+      const meta = document.createElement('div'); meta.className='meta'; meta.textContent = 'Anda';
+      wrap.appendChild(meta);
+    } else {
+      const meta = document.createElement('div'); meta.className='meta'; meta.textContent = 'Tutor AI';
+      wrap.appendChild(meta);
+    }
+    const txt = document.createElement('div');
+    txt.innerHTML = content;
+    wrap.appendChild(txt);
+    messagesEl.appendChild(wrap);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+
+  // Simple local AI fallback (kehilangan koneksi)
+  function localAIreply(userText, mode='ja') {
+    // very simple heuristics for friendly tutor replies
+    const low = userText.toLowerCase().trim();
+    if(mode === 'id') {
+      // Indonesian explanation
+      if(low.includes('halo') || low.includes('konnichi')) return 'Halo! Apa yang ingin kamu pelajari hari ini? (contoh: hiragana, kosakata, atau percakapan sederhana)';
+      if(low.includes('cara') || low.includes('bagaimana')) return 'Kita bisa latihan percakapan sederhana. Coba tanyakan: 「お名前は何ですか？」';
+      return 'Baik — cobalah bertanya atau ucapkan kalimat sederhana dalam bahasa Jepang. Saya akan menjawab dan berbicara kembali.';
+    } else {
+      // Japanese responses (simple, N5-friendly)
+      if(low.includes('こんにちは') || low.includes('konnichiwa')) return 'こんにちは！はじめまして。今日は何を勉強しますか？';
+      if(low.includes('おはよう')) return 'おはようございます！今日もがんばりましょう。';
+      if(low.includes('ありがとう')) return 'どういたしまして。もっと練習しますか？';
+      if(low.includes('さようなら')|| low.includes('さよなら')) return 'さようなら！またね。';
+      return 'いいですね。もう一度言ってみてください。ゆっくり話しますね。';
+    }
+  }
+
+  // send to AI server (if available) or fallback
+  async function getAIResponse(text, mode) {
+    // try server first
+    try {
+      const resp = await fetch('/api/ai-tutor', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({text, mode})
+      });
+      if(!resp.ok) throw new Error('server error');
+      const data = await resp.json();
+      if(data && data.reply) return data.reply;
+    } catch(e){
+      // server not available or error -> fallback
+      return localAIreply(text, mode);
+    }
+  }
+
+  // TTS (speak) - prefers browser speechSynthesis for ja-JP
+  function speak(text, lang='ja') {
+    // if voiceSelect is set to 'high' you may want to integrate external TTS service
+    if(voiceSelect.value === 'high') {
+      // Place to call your high-quality TTS server & play audio
+      // Example: fetch('/api/tts',{method:'POST', body:{text}}) -> receive audio URL -> play
+      // For now fallback to browser
+    }
+    if('speechSynthesis' in window) {
+      const utt = new SpeechSynthesisUtterance(text);
+      // choose lang: ja or id
+      utt.lang = (lang==='id') ? 'id-ID' : 'ja-JP';
+      // optional: adjust rate for clearer output
+      utt.rate = 0.95;
+      // pick a voice if available
+      const voices = speechSynthesis.getVoices();
+      // try to find a japanese voice
+      const v = voices.find(v => (lang==='ja' && v.lang.startsWith('ja')) || (lang==='id' && v.lang.startsWith('id')));
+      if(v) utt.voice = v;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utt);
+    } else {
+      console.warn('TTS not supported in this browser');
+    }
+  }
+
+  // ---------- STT setup ----------
+  let recognition = null;
+  let isRecording = false;
+  function canUseSTT(){
+    return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+  }
+  if(canUseSTT()){
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SR();
+    recognition.lang = 'ja-JP'; // default listen in Japanese (user can speak in Japanese)
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = async (event) => {
+      const text = event.results[0][0].transcript;
+      pushMessage(text, 'user');
+      textInput.value = '';
+      // get AI response
+      const mode = (langMode.value === 'id') ? 'id' : 'ja';
+      const reply = await getAIResponse(text, mode);
+      pushMessage(reply, 'ai');
+      speak(reply, mode);
+    };
+
+    recognition.onend = () => {
+      isRecording = false;
+      recBtn.classList.remove('recording');
+      recBtn.title = 'Klik untuk bicara';
+    };
+    recognition.onerror = (e) => {
+      console.error('STT error', e);
+      isRecording = false;
+      recBtn.classList.remove('recording');
+    };
+  } else {
+    // disable button if not supported
+    recBtn.title = 'STT tidak tersedia di browser ini';
+    recBtn.style.opacity = '0.55';
+  }
+
+  // rec button handler
+  recBtn.addEventListener('click', async () => {
+    if(!canUseSTT()) { alert('STT tidak tersedia pada browser ini. Gunakan input teks.'); return; }
+    if(!isRecording){
+      // start
+      recognition.lang = (langMode.value === 'id') ? 'id-ID' : 'ja-JP';
+      recognition.start();
+      isRecording = true;
+      recBtn.classList.add('recording');
+      recBtn.title = 'Sedang merekam... klik lagi untuk stop (atau tunggu otomatis)';
+    } else {
+      // stop manually
+      recognition.stop();
+      isRecording = false;
+      recBtn.classList.remove('recording');
+    }
+  });
+
+  // send via text input
+  sendBtn.addEventListener('click', async ()=>{
+    const text = textInput.value.trim();
+    if(!text) return;
+    pushMessage(text, 'user');
+    textInput.value = '';
+    const mode = (langMode.value === 'id') ? 'id' : 'ja';
+    const reply = await getAIResponse(text, mode);
+    pushMessage(reply, 'ai');
+    speak(reply, mode);
+  });
+
+  // enter key
+  textInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ sendBtn.click(); } });
+
+  clearBtn.addEventListener('click', ()=>{ messagesEl.innerHTML = ''; });
+
+  // load initial greeting
+  (async function init(){
+    pushMessage('Halo! Saya tutor Jepang interaktif. Kamu bisa ketik atau tekan mikrofon lalu bicara. (Contoh: こんにちは)', 'ai');
+
+    // attempt to warm up voices (some browsers populate voices asynchronously)
+    if('speechSynthesis' in window){
+      speechSynthesis.onvoiceschanged = () => { /* no-op, just ensure voices loaded */ };
+      // pre-load voices
+      speechSynthesis.getVoices();
+    }
+
+    // if /api/ai-tutor exists, optionally show server status
+    try {
+      const ping = await fetch('/api/ai-tutor', {method:'POST',headers:{'Content-Type':'application/json'}, body:JSON.stringify({ping:true})});
+      if(ping && ping.ok){
+        // server available — you can use high-quality TTS + AI model server-side
+        // (no UI change for now)
+      }
+    } catch(e){
+      // server not available — still fine, using local fallback
+    }
+  })();
+
+  </script>
+</body>
+</html>
